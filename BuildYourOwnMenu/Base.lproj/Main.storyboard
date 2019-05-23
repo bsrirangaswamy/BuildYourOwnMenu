@@ -52,8 +52,7 @@
                                             <constraint firstItem="uPI-2T-zOj" firstAttribute="width" secondItem="JPS-Gp-bjL" secondAttribute="width" multiplier="0.35" id="vQE-Zj-nT7"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="mainItemImage" destination="uPI-2T-zOj" id="ATZ-qW-T5J"/>
-                                            <outlet property="mainItemImageView" destination="uPI-2T-zOj" id="2jj-bu-vuO"/>
+                                            <outlet property="mainItemImageView" destination="uPI-2T-zOj" id="5eH-qL-jCH"/>
                                             <outlet property="mainItemLabel" destination="IyM-1u-9pQ" id="pWY-Ni-Sn1"/>
                                         </connections>
                                     </tableViewCell>

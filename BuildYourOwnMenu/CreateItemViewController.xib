@@ -24,8 +24,8 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="QF6-qz-giF">
-                    <rect key="frame" x="41.5" y="212" width="331" height="482"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="QF6-qz-giF">
+                    <rect key="frame" x="41.5" y="189.5" width="331" height="527"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="vQw-w9-WiA">
                             <rect key="frame" x="0.0" y="0.0" width="331" height="30"/>
@@ -61,11 +61,26 @@
                                 </textField>
                             </subviews>
                         </stackView>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6DK-jh-3qS">
-                            <rect key="frame" x="0.0" y="140" width="331" height="269"/>
-                        </imageView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="y2p-lo-Im8">
+                            <rect key="frame" x="41.5" y="140" width="248" height="314"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6DK-jh-3qS">
+                                    <rect key="frame" x="0.0" y="0.0" width="248" height="261"/>
+                                </imageView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOd-ku-GmL">
+                                    <rect key="frame" x="80.5" y="281" width="87" height="33"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    <state key="normal" title="Edit Image">
+                                        <color key="titleColor" red="1" green="0.56862745100000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="editImageButtonPressed:" destination="-1" eventType="touchUpInside" id="x2J-x5-rqg"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Zk0-79-xpI">
-                            <rect key="frame" x="0.0" y="449" width="331" height="33"/>
+                            <rect key="frame" x="0.0" y="494" width="331" height="33"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpT-Dh-qiF">
                                     <rect key="frame" x="0.0" y="0.0" width="155.5" height="33"/>
@@ -103,7 +118,7 @@
             <constraints>
                 <constraint firstItem="QF6-qz-giF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="8Fx-8Q-j2a"/>
                 <constraint firstItem="QF6-qz-giF" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.8" id="ONQ-Wb-sVh"/>
-                <constraint firstItem="6DK-jh-3qS" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.3" id="PBU-mi-Vat"/>
+                <constraint firstItem="y2p-lo-Im8" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.35" id="iqa-4M-DrT"/>
                 <constraint firstItem="QF6-qz-giF" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" id="nlM-wu-0mc"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

@@ -11,25 +11,33 @@ import CoreData
 
 class PersistenceManager: NSObject {
     
-    var managedContext: NSManagedObjectContext
+    static let sharedInstance = PersistenceManager()
+    
+    var managedContext: NSManagedObjectContext? = nil
     
     lazy var fetchedResultsController: NSFetchedResultsController<MenuGroup> = {
         let fetchRequest: NSFetchRequest<MenuGroup> = MenuGroup.fetchRequest()
-        let fetchRequestContrller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedContext, sectionNameKeyPath: nil, cacheName: nil)
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        let fetchRequestContrller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedContext!, sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try fetchRequestContrller.performFetch()
+            print("Bala fetch successful")
+        } catch let error as NSError {
+            print("Fetch failed: error = \(error) and description = \(error.userInfo)")
+        }
         return fetchRequestContrller
     }()
     
-    init(managedContext: NSManagedObjectContext) {
-        self.managedContext = managedContext
-    }
-    
-    func saveData(menuGroup: MenuGroup) {
-        guard let appDelegateRef = UIApplication.shared.delegate as? AppDelegate else { return }
-        let saveManagedContext = appDelegateRef.persistentContainer.viewContext
+    func saveData(name: String, imageData: Data?, price: String?) {
+        let menuGroupSave = MenuGroup(context: managedContext!)
+        menuGroupSave.name = name
+        menuGroupSave.imageData = imageData
         do {
-            try saveManagedContext.save()
+            try managedContext!.save()
+            print("Bala save successful")
         } catch let error as NSError {
-            print("Save failed; error = \(error), description = \(error.userInfo)")
+            print("Save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
 

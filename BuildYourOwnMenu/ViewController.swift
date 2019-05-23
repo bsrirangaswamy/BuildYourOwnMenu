@@ -21,7 +21,6 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PersistenceManager.sharedInstance.fetchedResultsController.delegate = self
-        print("Bala data stored = \(PersistenceManager.sharedInstance.fetchedResultsController.sections)")
     }
 
     @IBAction func addMainMenuItem(_ sender: UIBarButtonItem) {
@@ -34,9 +33,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var rowCount = 0
-        if let appDelegateRef = UIApplication.shared.delegate as? AppDelegate {
-            rowCount = PersistenceManager.sharedInstance.fetchedResultsController.sections?[section].numberOfObjects ?? 0
-        }
+        rowCount = PersistenceManager.sharedInstance.fetchedResultsController.sections?[section].numberOfObjects ?? 0
         return rowCount
     }
     
@@ -48,6 +45,27 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.mainItemImageView.image = UIImage(data: imgData)
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+            PersistenceManager.sharedInstance.deleteMainMenuData(indexPath: indexPath)
+        }
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
+            self.editMainMenu(atIndexPath: indexPath)
+        }
+        return [deleteAction, editAction]
+    }
+    
+    func editMainMenu(atIndexPath: IndexPath) {
+        let createItemController = CreateItemViewController()
+        let menuGroupEdit = PersistenceManager.sharedInstance.fetchedResultsController.object(at: atIndexPath)
+        createItemController.isMainMenu = true
+        createItemController.isEditMode = true
+        createItemController.imageDataReceived = menuGroupEdit.imageData
+        createItemController.nameReceived = menuGroupEdit.name
+        createItemController.indexPath = atIndexPath
+        self.present(createItemController, animated: true, completion: nil)
     }
 }
 

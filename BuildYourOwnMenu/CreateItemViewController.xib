@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CreateItemViewController" customModule="BuildYourOwnMenu" customModuleProvider="target">
             <connections>
+                <outlet property="editImageButton" destination="JOd-ku-GmL" id="ciH-wb-4Id"/>
                 <outlet property="itemImageView" destination="6DK-jh-3qS" id="Tsb-4x-zBt"/>
                 <outlet property="nameTextField" destination="akV-mc-70D" id="qIa-Pk-VXS"/>
                 <outlet property="priceStackView" destination="4SM-7r-YhV" id="0O6-Lb-TjX"/>
@@ -40,7 +41,7 @@
                                     <rect key="frame" x="77.5" y="0.0" width="253.5" height="30"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                 </textField>
                             </subviews>
                         </stackView>
@@ -57,7 +58,7 @@
                                     <rect key="frame" x="77.5" y="0.0" width="253.5" height="30"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                 </textField>
                             </subviews>
                         </stackView>
@@ -65,10 +66,10 @@
                             <rect key="frame" x="41.5" y="140" width="248" height="314"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6DK-jh-3qS">
-                                    <rect key="frame" x="0.0" y="0.0" width="248" height="261"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="248" height="231"/>
                                 </imageView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOd-ku-GmL">
-                                    <rect key="frame" x="80.5" y="281" width="87" height="33"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOd-ku-GmL">
+                                    <rect key="frame" x="80.5" y="251" width="87" height="63"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <state key="normal" title="Edit Image">
                                         <color key="titleColor" red="1" green="0.56862745100000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -78,6 +79,9 @@
                                     </connections>
                                 </button>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="JOd-ku-GmL" firstAttribute="height" secondItem="y2p-lo-Im8" secondAttribute="height" multiplier="0.2" id="BVE-7g-nPz"/>
+                            </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Zk0-79-xpI">
                             <rect key="frame" x="0.0" y="494" width="331" height="33"/>

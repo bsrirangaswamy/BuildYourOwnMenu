@@ -4,7 +4,13 @@
         <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="SubMenuItem" representedClassName="SubMenuItem" syncable="YES" codeGenerationType="class">
+        <attribute name="itemImageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="itemName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="itemPrice" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="MenuGroup" positionX="-36" positionY="9" width="128" height="75"/>
+        <element name="SubMenuItem" positionX="-36" positionY="27" width="128" height="90"/>
     </elements>
 </model>

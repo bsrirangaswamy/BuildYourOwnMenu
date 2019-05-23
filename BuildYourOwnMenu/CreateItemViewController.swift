@@ -12,27 +12,45 @@ class CreateItemViewController: UIViewController {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var priceTextField: UITextField!
+    @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var priceStackView: UIStackView!
     
     var isMainMenu: Bool = false
+    var isEditMode: Bool = false
+    
     var imagePickerController = UIImagePickerController()
+    
+    var imageDataReceived: Data?
+    var nameReceived: String?
+    var priceReceived: String?
+    var indexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         nameTextField.delegate = self
         priceTextField.delegate = self
+        imagePickerController.delegate = self
         
         if isMainMenu {
             self.priceStackView.isHidden = true
         }
+        
+        if isEditMode {
+            self.nameTextField.text = nameReceived ?? ""
+            self.priceTextField.text = priceReceived ?? ""
+            if let imageDataRecd = imageDataReceived {
+                self.itemImageView.image = UIImage(data: imageDataRecd)
+            }
+        }
+        self.view.bringSubviewToFront(editImageButton)
+        print("Bala is edit button interaction enabled = \(editImageButton.isUserInteractionEnabled)")
     }
     
     @IBAction func editImageButtonPressed(_ sender: UIButton) {
-        imagePickerController.delegate = self
         imagePickerController.allowsEditing = false
-        
+
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if let alertAction = self.createAction(title: "Take Picture", sourceType: .camera){
             alertController.addAction(alertAction)
@@ -53,7 +71,11 @@ class CreateItemViewController: UIViewController {
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
         guard let nameText = nameTextField.text, let pickedImage = itemImageView.image else { return }
-        PersistenceManager.sharedInstance.saveData(name: nameText, imageData: pickedImage.pngData(), price: nil)
+        if isEditMode, let indPath = indexPath {
+            PersistenceManager.sharedInstance.updateMainMenuData(indexPath: indPath, name: nameText, imageData: pickedImage.pngData())
+        } else {
+            PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.pngData())
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -77,6 +99,7 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
             return
         }
         itemImageView.image = pickedImage
+        dismiss(animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

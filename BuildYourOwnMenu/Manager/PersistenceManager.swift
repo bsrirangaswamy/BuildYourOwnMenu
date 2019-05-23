@@ -29,15 +29,40 @@ class PersistenceManager: NSObject {
         return fetchRequestContrller
     }()
     
-    func saveData(name: String, imageData: Data?, price: String?) {
-        let menuGroupSave = MenuGroup(context: managedContext!)
-        menuGroupSave.name = name
-        menuGroupSave.imageData = imageData
+    // MARK :- Add, Update and Delete functions for Main menu group Items
+    
+    func addMainMenuData(name: String, imageData: Data?) {
+        let menuGroupAdd = MenuGroup(context: managedContext!)
+        menuGroupAdd.name = name
+        menuGroupAdd.imageData = imageData
         do {
             try managedContext!.save()
             print("Bala save successful")
         } catch let error as NSError {
             print("Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
+    
+    func updateMainMenuData(indexPath: IndexPath, name: String, imageData: Data?) {
+        let menuGroupUpdate = self.fetchedResultsController.object(at: indexPath)
+        menuGroupUpdate.name = name
+        menuGroupUpdate.imageData = imageData
+        do {
+            try managedContext?.save()
+            print("Bala update saved successful")
+        } catch let error as NSError {
+            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
+    
+    func deleteMainMenuData(indexPath: IndexPath) {
+        let menuGroupDelete = self.fetchedResultsController.object(at: indexPath)
+        self.managedContext?.delete(menuGroupDelete)
+        do {
+            try managedContext?.save()
+            print("Bala update saved successful")
+        } catch let error as NSError {
+            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
 

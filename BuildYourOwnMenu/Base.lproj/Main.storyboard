@@ -73,7 +73,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="Drw-0R-aFc">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="ebS-Tg-3F4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="ebS-Tg-3F4">
                             <connections>
                                 <action selector="addMainMenuItem:" destination="BYZ-38-t0r" id="fnd-c8-Ao4"/>
                             </connections>

@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import AVFoundation
 
 class CreateItemViewController: UIViewController {
     
@@ -52,21 +53,20 @@ class CreateItemViewController: UIViewController {
     }
     
     @IBAction func editImageButtonPressed(_ sender: UIButton) {
-        checkPermission()
         imagePickerController.allowsEditing = false
 
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        if let alertAction = self.createAction(title: "Take Picture", sourceType: .camera){
-            alertController.addAction(alertAction)
+        if let cameraAction = self.createAction(title: "Take Picture", sourceType: .camera) {
+            alertController.addAction(cameraAction)
         }
-        if let alertAction = self.createAction(title: "Photo Library", sourceType: .photoLibrary) {
-            alertController.addAction(alertAction)
+        if let photoLibAction = self.createAction(title: "Photo Library", sourceType: .photoLibrary) {
+            alertController.addAction(photoLibAction)
         }
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            alertController.popoverPresentationController?.sourceView = self.view
-            alertController.popoverPresentationController?.sourceRect = self.view.bounds
+            alertController.popoverPresentationController?.sourceView = sender
+            alertController.popoverPresentationController?.sourceRect = sender.bounds
             alertController.popoverPresentationController?.permittedArrowDirections = [.down, .up]
         }
         
@@ -113,7 +113,7 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         guard let pickedImage = info[.originalImage] as? UIImage else {
             return
         }
-        itemImageView.image = pickedImage
+        itemImageView.image = pickedImage.updateOrientation()
         dismiss(animated: true, completion: nil)
     }
     
@@ -125,34 +125,70 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
             return nil
         }
-        let alertAction = UIAlertAction(title: title, style: .default) { [weak self] _ in
-            guard let strongSelf = self else { return }
-            strongSelf.imagePickerController.sourceType = sourceType
-            strongSelf.present(strongSelf.imagePickerController, animated: true)
+        let alertAction = UIAlertAction(title: title, style: .default) { [unowned self] (_) in
+            self.checkPermission(sourceType: sourceType, completion: { [unowned self] (isAccessGranted) in
+                if isAccessGranted {
+                    self.imagePickerController.sourceType = sourceType
+                    self.present(self.imagePickerController, animated: true)
+                }
+            })
         }
         return alertAction
     }
     
-    func checkPermission() {
-        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-        switch photoAuthorizationStatus {
-        case .authorized:
-            print("Access is granted by user")
-        case .notDetermined:
-            PHPhotoLibrary.requestAuthorization({
-                (newStatus) in
-                print("status is \(newStatus)")
-                if newStatus ==  PHAuthorizationStatus.authorized {
-                    print("success")
+    func checkPermission(sourceType: UIImagePickerController.SourceType, completion: @escaping (_ isPermissionGranted: Bool) -> Void) {
+        switch sourceType {
+        case .camera:
+            let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+            if cameraAuthorizationStatus == .authorized {
+                completion(true)
+            } else if cameraAuthorizationStatus == .notDetermined {
+                AVCaptureDevice.requestAccess(for: .video) { (isAccessGranted) in
+                    if isAccessGranted {
+                        print("Camera access granted")
+                        completion(true)
+                    } else {
+                        completion(false)
+                    }
                 }
-            })
-            print("It is not determined until now")
-        case .restricted:
-            print("User do not have access to photo album.")
-        case .denied:
-            print("User has denied the permission.")
+            } else {
+                completion(false)
+            }
+            break
+        case .photoLibrary:
+            let photoLibAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+            if photoLibAuthorizationStatus == .authorized {
+                completion(true)
+            } else if photoLibAuthorizationStatus == .notDetermined {
+                PHPhotoLibrary.requestAuthorization { (requestAuthStatus) in
+                    if requestAuthStatus == .authorized {
+                        print("Photo library access granted")
+                        completion(true)
+                    } else {
+                        completion(false)
+                    }
+                }
+            }
         default:
-            print("User has not granted permission")
+            print("Source type undefined")
+            completion(false)
+        }
+    }
+}
+
+extension UIImage {
+    // when saving as png data, rotation is not saved as JPEG rotation flag is absent in png.
+    func updateOrientation() -> UIImage {
+        if self.imageOrientation == UIImage.Orientation.up {
+            return self
+        }
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        if let normalizedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            return normalizedImage
+        } else {
+            return self
         }
     }
 }

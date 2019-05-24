@@ -20,12 +20,14 @@ class CreateItemViewController: UIViewController {
     var isMainMenu: Bool = false
     var isEditMode: Bool = false
     
-    var imagePickerController = UIImagePickerController()
+    var mainGroupIndexPath: IndexPath?
+    var subMenuIndex: Int?
     
-    var imageDataReceived: Data?
     var nameReceived: String?
     var priceReceived: String?
-    var indexPath: IndexPath?
+    var imageDataReceived: Data?
+    
+    private var imagePickerController = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,14 +75,21 @@ class CreateItemViewController: UIViewController {
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
         guard let nameText = nameTextField.text, let pickedImage = itemImageView.image else { return }
-        if isEditMode, let indPath = indexPath {
-            PersistenceManager.sharedInstance.updateMainMenuData(indexPath: indPath, name: nameText, imageData: pickedImage.pngData())
-        }
-        if isMainMenu && indexPath == nil {
-            PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.pngData())
-        }
-        if !isMainMenu, let indPath = indexPath {
-            PersistenceManager.sharedInstance.addSubMenuDataInMainMenu(atIndexPath: indPath, name: nameText, imageData: pickedImage.pngData(), price: priceTextField.text)
+        if isMainMenu {
+            if isEditMode, let mainIndPath = mainGroupIndexPath {
+                PersistenceManager.sharedInstance.updateMainMenuData(indexPath: mainIndPath, name: nameText, imageData: pickedImage.pngData())
+            } else {
+                PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.pngData())
+            }
+        } else {
+            guard let mainIndPath = mainGroupIndexPath else { return }
+            if isEditMode, let subIndex = subMenuIndex {
+                PersistenceManager.sharedInstance.updateSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: subIndex, name: nameText, price: priceTextField.text, imageData: pickedImage.pngData())
+                
+            } else {
+                PersistenceManager.sharedInstance.addSubMenuDataInMainMenu(atIndexPath: mainIndPath, name: nameText, price: priceTextField.text, imageData: pickedImage.pngData())
+            }
+            
         }
         self.dismiss(animated: true, completion: nil)
     }

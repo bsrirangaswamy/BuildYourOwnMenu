@@ -23,7 +23,7 @@ class SubMenuItemViewController: UIViewController {
         print("Bala add button tapped")
         let createItemController = CreateItemViewController()
         if let mainIndPath = mainGroupIndexPath {
-            createItemController.indexPath = mainIndPath
+            createItemController.mainGroupIndexPath = mainIndPath
         }
         self.present(createItemController, animated: true, completion: nil)
     }
@@ -61,17 +61,27 @@ extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        guard let mainIndPath = mainGroupIndexPath else { return nil }
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
-            if let mainIndPath = self.mainGroupIndexPath {
-                PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: indexPath.row)
-            }
+            PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: indexPath.row)
         }
-//        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
-//            self.editMainMenu(atIndexPath: indexPath)
-//        }
-        return [deleteAction]
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
+            self.editSubMenuInMainMenu(atIndexPath: mainIndPath, subMenuIndex: indexPath.row)
+        }
+        return [deleteAction, editAction]
     }
     
+    func editSubMenuInMainMenu(atIndexPath: IndexPath, subMenuIndex: Int) {
+        let createItemController = CreateItemViewController()
+        let subMenuGroupEdit = PersistenceManager.sharedInstance.fetchedResultsController.object(at: atIndexPath).subMenuItem?[subMenuIndex] as? SubMenuItem
+        createItemController.isEditMode = true
+        createItemController.mainGroupIndexPath = atIndexPath
+        createItemController.subMenuIndex = subMenuIndex
+        createItemController.nameReceived = subMenuGroupEdit?.itemName
+        createItemController.priceReceived = subMenuGroupEdit?.itemPrice
+        createItemController.imageDataReceived = subMenuGroupEdit?.itemImageData
+        self.present(createItemController, animated: true, completion: nil)
+    }
     
 }
 

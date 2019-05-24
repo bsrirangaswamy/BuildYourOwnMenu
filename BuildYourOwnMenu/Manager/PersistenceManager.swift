@@ -35,6 +35,7 @@ class PersistenceManager: NSObject {
         let menuGroupAdd = MenuGroup(context: managedContext!)
         menuGroupAdd.name = name
         menuGroupAdd.imageData = imageData
+        menuGroupAdd.lastUpdated = Date()
         do {
             try managedContext!.save()
             print("Bala save successful")
@@ -47,6 +48,7 @@ class PersistenceManager: NSObject {
         let menuGroupUpdate = self.fetchedResultsController.object(at: indexPath)
         menuGroupUpdate.name = name
         menuGroupUpdate.imageData = imageData
+        menuGroupUpdate.lastUpdated = Date()
         do {
             try managedContext?.save()
             print("Bala update saved successful")
@@ -68,18 +70,36 @@ class PersistenceManager: NSObject {
     
     // MARK :- Add, Update and Delete functions for sub menu group Items
     
-    func addSubMenuDataInMainMenu(atIndexPath: IndexPath, name: String, imageData: Data?, price: String?) {
+    func addSubMenuDataInMainMenu(atIndexPath: IndexPath, name: String, price: String?, imageData: Data?) {
         let menuGroupUpdate = self.fetchedResultsController.object(at: atIndexPath)
         let subMenuAdd = SubMenuItem(context: managedContext!)
         subMenuAdd.itemName = name
-        subMenuAdd.itemImageData = imageData
         subMenuAdd.itemPrice = price
+        subMenuAdd.itemImageData = imageData
+        menuGroupUpdate.lastUpdated = Date()
         menuGroupUpdate.addToSubMenuItem(subMenuAdd)
         do {
             try managedContext!.save()
             print("Bala save successful")
         } catch let error as NSError {
             print("Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
+    
+    func updateSubMenuDataInMainMenu(atIndexPath: IndexPath, subMenuIndex: Int, name: String, price: String?, imageData: Data?) {
+        let menuGroupUpdate = self.fetchedResultsController.object(at: atIndexPath)
+        guard let subMenuUpdate = menuGroupUpdate.subMenuItem?[subMenuIndex] as? SubMenuItem else {
+            return
+        }
+        subMenuUpdate.itemName = name
+        subMenuUpdate.itemPrice = price
+        subMenuUpdate.itemImageData = imageData
+        menuGroupUpdate.lastUpdated = Date()
+        do {
+            try managedContext!.save()
+            print("Bala Update save successful")
+        } catch let error as NSError {
+            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     

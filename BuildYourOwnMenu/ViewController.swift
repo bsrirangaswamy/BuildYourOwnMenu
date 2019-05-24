@@ -72,9 +72,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let menuGroupEdit = PersistenceManager.sharedInstance.fetchedResultsController.object(at: atIndexPath)
         createItemController.isMainMenu = true
         createItemController.isEditMode = true
+        createItemController.mainGroupIndexPath = atIndexPath
         createItemController.imageDataReceived = menuGroupEdit.imageData
         createItemController.nameReceived = menuGroupEdit.name
-        createItemController.indexPath = atIndexPath
         self.present(createItemController, animated: true, completion: nil)
     }
 }

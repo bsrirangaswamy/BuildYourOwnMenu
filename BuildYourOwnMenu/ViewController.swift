@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        self.title = "Main Menu"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,18 +38,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as! MainMenuTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as?  MainMenuTableViewCell else { return MainMenuTableViewCell() }
         let menuGroupFetched = PersistenceManager.sharedInstance.fetchedResultsController.object(at: indexPath)
-        cell.itemLabel.text = menuGroupFetched.name
-        if let imgData = menuGroupFetched.imageData {
-            DispatchQueue.global(qos: .background).async {
-                let image = UIImage(data: imgData)
-                DispatchQueue.main.async {
-                    cell.itemImageView.image = image
-                }
-            }
-        }
-        cell.itemPriceLabel.isHidden = true
+        cell.setupCell(name: menuGroupFetched.name, price: nil, imageData: menuGroupFetched.imageData)
         return cell
     }
     
@@ -89,7 +80,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
 extension ViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showSubItemsVC", let navController = segue.destination as? UINavigationController, let subMenuItemVC = navController.topViewController as? SubMenuItemViewController {
-            subMenuItemVC.mainGroupIndexPath = mainGroupTableView.indexPathForSelectedRow
+            subMenuItemVC.mainGroupIndexPath = mainGroupTableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
         }
     }
 }

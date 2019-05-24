@@ -18,6 +18,24 @@ class MainMenuTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    func setupCell(name: String?, price: String?, imageData: Data?) {
+        itemLabel.text = name
+        if let priceText = price {
+            itemPriceLabel.text = priceText
+            itemPriceLabel.isHidden = false
+        } else {
+            itemPriceLabel.isHidden = true
+        }
+        if let imgData = imageData {
+            DispatchQueue.global(qos: .background).async {
+                let image = UIImage(data: imgData)
+                DispatchQueue.main.async {[unowned self] in
+                    self.itemImageView.image = image
+                }
+            }
+        }
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

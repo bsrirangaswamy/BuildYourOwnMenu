@@ -94,6 +94,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2DC8F5952298A3B6004C3012 /* XIBs */ = {
+			isa = PBXGroup;
+			children = (
+				2DC8F5872296C50A004C3012 /* CreateItemViewController.xib */,
+				2DC8F5862296C50A004C3012 /* CreateItemViewController.swift */,
+			);
+			name = XIBs;
+			sourceTree = "<group>";
+		};
+		2DC8F5962298A3D2004C3012 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		2DF4BD2A2295F75E00242FCA = {
 			isa = PBXGroup;
 			children = (
@@ -120,9 +137,8 @@
 				2DF4BD362295F75E00242FCA /* AppDelegate.swift */,
 				2DF4BD382295F75E00242FCA /* ViewController.swift */,
 				2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */,
-				2DC8F5862296C50A004C3012 /* CreateItemViewController.swift */,
-				2DC8F5872296C50A004C3012 /* CreateItemViewController.xib */,
-				2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */,
+				2DC8F5952298A3B6004C3012 /* XIBs */,
+				2DC8F5962298A3D2004C3012 /* Cells */,
 				2DF4BD7D22961B7600242FCA /* Manager */,
 				2DF4BD3A2295F75E00242FCA /* Main.storyboard */,
 				2DF4BD402295F76000242FCA /* Assets.xcassets */,

@@ -12,19 +12,18 @@ import CoreData
 class SubMenuItemViewController: UIViewController {
 
     @IBOutlet weak var subMenuItemTableView: UITableView!
-    var mainGroupIndexPath: IndexPath?
+    var mainGroupIndexPath: IndexPath = IndexPath(row: 0, section: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         PersistenceManager.sharedInstance.fetchedResultsController.delegate = self
+        self.title = PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainGroupIndexPath).name
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         print("Bala add button tapped")
         let createItemController = CreateItemViewController()
-        if let mainIndPath = mainGroupIndexPath {
-            createItemController.mainGroupIndexPath = mainIndPath
-        }
+        createItemController.mainGroupIndexPath = mainGroupIndexPath
         self.present(createItemController, animated: true, completion: nil)
     }
 
@@ -36,37 +35,21 @@ class SubMenuItemViewController: UIViewController {
 
 extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var rowCount = 0
-        if let mainIndPath = mainGroupIndexPath {
-            rowCount = PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainIndPath).subMenuItem?.count ?? 0
-        }
-        return rowCount
+        return PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainGroupIndexPath).subMenuItem?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as! MainMenuTableViewCell
-        if let mainIndPath = mainGroupIndexPath, let subItem = PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainIndPath).subMenuItem?[indexPath.row] as? SubMenuItem {
-            cell.itemLabel.text = subItem.itemName
-            cell.itemPriceLabel.text = subItem.itemPrice
-            if let imgData = subItem.itemImageData {
-                DispatchQueue.global(qos: .background).async {
-                    let image = UIImage(data: imgData)
-                    DispatchQueue.main.async {
-                        cell.itemImageView.image = image
-                    }
-                }
-            }
-        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as? MainMenuTableViewCell,  let subItem = PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainGroupIndexPath).subMenuItem?[indexPath.row] as? SubMenuItem else { return MainMenuTableViewCell() }
+        cell.setupCell(name: subItem.itemName, price: subItem.itemPrice, imageData: subItem.itemImageData)
         return cell
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        guard let mainIndPath = mainGroupIndexPath else { return nil }
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
-            PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: indexPath.row)
+            PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)
         }
         let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
-            self.editSubMenuInMainMenu(atIndexPath: mainIndPath, subMenuIndex: indexPath.row)
+            self.editSubMenuInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)
         }
         return [deleteAction, editAction]
     }

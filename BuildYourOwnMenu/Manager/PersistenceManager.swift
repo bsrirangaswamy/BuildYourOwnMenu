@@ -65,5 +65,32 @@ class PersistenceManager: NSObject {
             print("Update Save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
-
+    
+    // MARK :- Add, Update and Delete functions for sub menu group Items
+    
+    func addSubMenuDataInMainMenu(atIndexPath: IndexPath, name: String, imageData: Data?, price: String?) {
+        let menuGroupUpdate = self.fetchedResultsController.object(at: atIndexPath)
+        let subMenuAdd = SubMenuItem(context: managedContext!)
+        subMenuAdd.itemName = name
+        subMenuAdd.itemImageData = imageData
+        subMenuAdd.itemPrice = price
+        menuGroupUpdate.addToSubMenuItem(subMenuAdd)
+        do {
+            try managedContext!.save()
+            print("Bala save successful")
+        } catch let error as NSError {
+            print("Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
+    
+    func deleteSubMenuDataInMainMenu(atIndexPath: IndexPath, subMenuIndex: Int) {
+        let menuGroupUpdate = self.fetchedResultsController.object(at: atIndexPath)
+        menuGroupUpdate.removeFromSubMenuItem(at: subMenuIndex)
+        do {
+            try managedContext!.save()
+            print("Bala delet save successful")
+        } catch let error as NSError {
+            print("Delete Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
 }

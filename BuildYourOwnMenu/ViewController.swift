@@ -40,10 +40,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as! MainMenuTableViewCell
         let menuGroupFetched = PersistenceManager.sharedInstance.fetchedResultsController.object(at: indexPath)
-        cell.mainItemLabel.text = menuGroupFetched.name
+        cell.itemLabel.text = menuGroupFetched.name
         if let imgData = menuGroupFetched.imageData {
-            cell.mainItemImageView.image = UIImage(data: imgData)
+            DispatchQueue.global(qos: .background).async {
+                let image = UIImage(data: imgData)
+                DispatchQueue.main.async {
+                    cell.itemImageView.image = image
+                }
+            }
         }
+        cell.itemPriceLabel.isHidden = true
         return cell
     }
     
@@ -55,6 +61,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             self.editMainMenu(atIndexPath: indexPath)
         }
         return [deleteAction, editAction]
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func editMainMenu(atIndexPath: IndexPath) {
@@ -72,6 +82,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         mainGroupTableView.reloadData()
+    }
+}
+
+
+extension ViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showSubItemsVC", let navController = segue.destination as? UINavigationController, let subMenuItemVC = navController.topViewController as? SubMenuItemViewController {
+            subMenuItemVC.mainGroupIndexPath = mainGroupTableView.indexPathForSelectedRow
+        }
     }
 }
 

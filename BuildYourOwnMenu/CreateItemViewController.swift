@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class CreateItemViewController: UIViewController {
     
@@ -49,6 +50,7 @@ class CreateItemViewController: UIViewController {
     }
     
     @IBAction func editImageButtonPressed(_ sender: UIButton) {
+        checkPermission()
         imagePickerController.allowsEditing = false
 
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -73,8 +75,12 @@ class CreateItemViewController: UIViewController {
         guard let nameText = nameTextField.text, let pickedImage = itemImageView.image else { return }
         if isEditMode, let indPath = indexPath {
             PersistenceManager.sharedInstance.updateMainMenuData(indexPath: indPath, name: nameText, imageData: pickedImage.pngData())
-        } else {
+        }
+        if isMainMenu && indexPath == nil {
             PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.pngData())
+        }
+        if !isMainMenu, let indPath = indexPath {
+            PersistenceManager.sharedInstance.addSubMenuDataInMainMenu(atIndexPath: indPath, name: nameText, imageData: pickedImage.pngData(), price: priceTextField.text)
         }
         self.dismiss(animated: true, completion: nil)
     }
@@ -94,7 +100,7 @@ extension CreateItemViewController: UITextFieldDelegate {
 }
 
 extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let pickedImage = info[.originalImage] as? UIImage else {
             return
         }
@@ -116,5 +122,28 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
             strongSelf.present(strongSelf.imagePickerController, animated: true)
         }
         return alertAction
+    }
+    
+    func checkPermission() {
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+        switch photoAuthorizationStatus {
+        case .authorized:
+            print("Access is granted by user")
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({
+                (newStatus) in
+                print("status is \(newStatus)")
+                if newStatus ==  PHAuthorizationStatus.authorized {
+                    print("success")
+                }
+            })
+            print("It is not determined until now")
+        case .restricted:
+            print("User do not have access to photo album.")
+        case .denied:
+            print("User has denied the permission.")
+        default:
+            print("User has not granted permission")
+        }
     }
 }

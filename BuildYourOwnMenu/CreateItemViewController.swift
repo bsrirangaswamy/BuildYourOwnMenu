@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import AVFoundation
 
 class CreateItemViewController: UIViewController {
     
@@ -34,7 +35,6 @@ class CreateItemViewController: UIViewController {
         
         nameTextField.delegate = self
         priceTextField.delegate = self
-        imagePickerController.delegate = self
         
         if isMainMenu {
             self.priceStackView.isHidden = true
@@ -48,29 +48,28 @@ class CreateItemViewController: UIViewController {
             }
         }
         self.view.bringSubviewToFront(editImageButton)
-        print("Bala is edit button interaction enabled = \(editImageButton.isUserInteractionEnabled)")
     }
     
     @IBAction func editImageButtonPressed(_ sender: UIButton) {
-        checkPermission()
-        imagePickerController.allowsEditing = false
-
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        if let alertAction = self.createAction(title: "Take Picture", sourceType: .camera){
-            alertController.addAction(alertAction)
-        }
-        if let alertAction = self.createAction(title: "Photo Library", sourceType: .photoLibrary) {
-            alertController.addAction(alertAction)
-        }
+        
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        let cameraAction: UIAlertAction = UIAlertAction(title: "Take Picture", style: .default) { action in
+            self.launchImagePicker(sender: sender, source: .camera)
+        }
+        alertController.addAction(cameraAction)
+        let photoLibraryAction: UIAlertAction = UIAlertAction(title: "Choose Existing Picture", style: .default) { action in
+            self.launchImagePicker(sender: sender, source: .photoLibrary)
+        }
+        alertController.addAction(photoLibraryAction)
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            alertController.popoverPresentationController?.sourceView = self.view
-            alertController.popoverPresentationController?.sourceRect = self.view.bounds
-            alertController.popoverPresentationController?.permittedArrowDirections = [.down, .up]
+            alertController.modalPresentationStyle = .popover
+            alertController.popoverPresentationController?.sourceView = sender
+            alertController.popoverPresentationController?.sourceRect = sender.bounds
         }
         
-        self.present(alertController, animated: true)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
@@ -113,7 +112,7 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         guard let pickedImage = info[.originalImage] as? UIImage else {
             return
         }
-        itemImageView.image = pickedImage
+        itemImageView.image = pickedImage.updateOrientation()
         dismiss(animated: true, completion: nil)
     }
     
@@ -121,38 +120,80 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         imagePickerController.dismiss(animated: true, completion: nil)
     }
     
-    func createAction(title: String, sourceType: UIImagePickerController.SourceType) -> UIAlertAction? {
-        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            return nil
+    func launchImagePicker(sender: UIButton, source: UIImagePickerController.SourceType) {
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = false
+        imagePickerController.sourceType = source
+        if source == .camera {
+            imagePickerController.modalPresentationStyle = .fullScreen
+        } else {
+            imagePickerController.modalPresentationStyle = UIModalPresentationStyle.popover
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                imagePickerController.popoverPresentationController?.sourceView = sender
+                imagePickerController.popoverPresentationController?.sourceRect = sender.bounds
+            }
         }
-        let alertAction = UIAlertAction(title: title, style: .default) { [weak self] _ in
-            guard let strongSelf = self else { return }
-            strongSelf.imagePickerController.sourceType = sourceType
-            strongSelf.present(strongSelf.imagePickerController, animated: true)
-        }
-        return alertAction
+        imagePickerController.display(rootController: self)
     }
-    
-    func checkPermission() {
-        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-        switch photoAuthorizationStatus {
-        case .authorized:
-            print("Access is granted by user")
-        case .notDetermined:
-            PHPhotoLibrary.requestAuthorization({
-                (newStatus) in
-                print("status is \(newStatus)")
-                if newStatus ==  PHAuthorizationStatus.authorized {
-                    print("success")
+}
+
+extension UIImagePickerController {
+    func display(rootController: UIViewController) {
+        switch sourceType {
+        case .camera:
+            guard AVCaptureDevice.authorizationStatus(for: .video) != .denied else {
+                let alertController = UIAlertController(title: nil, message: "Camera access denied", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                rootController.present(alertController, animated: true, completion: nil)
+                return
+            }
+            
+            rootController.present(self, animated: true, completion: {
+                if AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined {
+                    AVCaptureDevice.requestAccess(for: .video, completionHandler: { (videoGranted: Bool) -> Void in
+                        if !videoGranted {
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    })
                 }
             })
-            print("It is not determined until now")
-        case .restricted:
-            print("User do not have access to photo album.")
-        case .denied:
-            print("User has denied the permission.")
+        case .photoLibrary:
+            guard PHPhotoLibrary.authorizationStatus() != .denied else {
+                let alertController = UIAlertController(title: nil, message: "Photo Access denied", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                rootController.present(alertController, animated: true, completion: nil)
+                return
+            }
+            
+            rootController.present(self, animated: true, completion: {
+                if PHPhotoLibrary.authorizationStatus() == .notDetermined {
+                    PHPhotoLibrary.requestAuthorization({ (status) in
+                        let granted = status == PHAuthorizationStatus.authorized
+                        if !granted {
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    })
+                }
+            })
         default:
-            print("User has not granted permission")
+            print("Bala default")
+        }
+    }
+}
+
+extension UIImage {
+    // when saving as png data, rotation is not saved as JPEG rotation flag is absent in png.
+    func updateOrientation() -> UIImage {
+        if self.imageOrientation == UIImage.Orientation.up {
+            return self
+        }
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        if let normalizedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            return normalizedImage
+        } else {
+            return self
         }
     }
 }

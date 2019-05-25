@@ -9,10 +9,19 @@
 import UIKit
 import CoreData
 
+enum UserActionOnTableView: Int {
+    case edit
+    case delete
+    case insert
+}
+
 class SubMenuItemViewController: UIViewController {
 
     @IBOutlet weak var subMenuItemTableView: UITableView!
     var mainGroupIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    
+    private var actionPerformed = UserActionOnTableView.insert
+    private var changedIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +33,7 @@ class SubMenuItemViewController: UIViewController {
         print("Bala add button tapped")
         let createItemController = CreateItemViewController()
         createItemController.mainGroupIndexPath = mainGroupIndexPath
+        actionPerformed = .insert
         self.present(createItemController, animated: true, completion: nil)
     }
 
@@ -46,9 +56,13 @@ extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+            self.actionPerformed = .delete
+            self.changedIndexPath = indexPath
             PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)
         }
         let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
+            self.actionPerformed = .edit
+            self.changedIndexPath = indexPath
             self.editSubMenuInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)
         }
         return [deleteAction, editAction]
@@ -69,7 +83,31 @@ extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate 
 }
 
 extension SubMenuItemViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        subMenuItemTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch actionPerformed {
+        case .insert:
+            let rowCount = self.subMenuItemTableView.numberOfRows(inSection: 0)
+            let newIndPath = IndexPath(row: rowCount, section: 0)
+            subMenuItemTableView.insertRows(at: [newIndPath], with: .automatic)
+            break
+        case .delete:
+            if let indPath = changedIndexPath {
+                subMenuItemTableView.deleteRows(at: [indPath], with: .automatic)
+            }
+            break
+        case .edit:
+            if let indPath = changedIndexPath {
+                subMenuItemTableView.reloadRows(at: [indPath], with: .automatic)
+            }
+            break
+        }
+    }
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        subMenuItemTableView.reloadData()
+        subMenuItemTableView.endUpdates()
     }
 }

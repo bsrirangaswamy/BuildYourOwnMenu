@@ -49,7 +49,6 @@ class CreateItemViewController: UIViewController {
             }
         }
         self.view.bringSubviewToFront(editImageButton)
-        print("Bala is edit button interaction enabled = \(editImageButton.isUserInteractionEnabled)")
     }
     
     @IBAction func editImageButtonPressed(_ sender: UIButton) {
@@ -77,17 +76,17 @@ class CreateItemViewController: UIViewController {
         guard let nameText = nameTextField.text, let pickedImage = itemImageView.image else { return }
         if isMainMenu {
             if isEditMode, let mainIndPath = mainGroupIndexPath {
-                PersistenceManager.sharedInstance.updateMainMenuData(indexPath: mainIndPath, name: nameText, imageData: pickedImage.pngData())
+                PersistenceManager.sharedInstance.updateMainMenuData(indexPath: mainIndPath, name: nameText, imageData: pickedImage.jpegData(compressionQuality: 1))
             } else {
-                PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.pngData())
+                PersistenceManager.sharedInstance.addMainMenuData(name: nameText, imageData: pickedImage.jpegData(compressionQuality: 1))
             }
         } else {
             guard let mainIndPath = mainGroupIndexPath else { return }
             if isEditMode, let subIndex = subMenuIndex {
-                PersistenceManager.sharedInstance.updateSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: subIndex, name: nameText, price: priceTextField.text, imageData: pickedImage.pngData())
+                PersistenceManager.sharedInstance.updateSubMenuDataInMainMenu(atIndexPath: mainIndPath, subMenuIndex: subIndex, name: nameText, price: priceTextField.text, imageData: pickedImage.jpegData(compressionQuality: 1))
                 
             } else {
-                PersistenceManager.sharedInstance.addSubMenuDataInMainMenu(atIndexPath: mainIndPath, name: nameText, price: priceTextField.text, imageData: pickedImage.pngData())
+                PersistenceManager.sharedInstance.addSubMenuDataInMainMenu(atIndexPath: mainIndPath, name: nameText, price: priceTextField.text, imageData: pickedImage.jpegData(compressionQuality: 1))
             }
             
         }
@@ -113,7 +112,7 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         guard let pickedImage = info[.originalImage] as? UIImage else {
             return
         }
-        itemImageView.image = pickedImage.updateOrientation()
+        itemImageView.image = pickedImage
         dismiss(animated: true, completion: nil)
     }
     
@@ -172,23 +171,6 @@ extension CreateItemViewController: UIImagePickerControllerDelegate, UINavigatio
         default:
             print("Source type undefined")
             completion(false)
-        }
-    }
-}
-
-extension UIImage {
-    // when saving as png data, rotation is not saved as JPEG rotation flag is absent in png.
-    func updateOrientation() -> UIImage {
-        if self.imageOrientation == UIImage.Orientation.up {
-            return self
-        }
-        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        if let normalizedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() {
-            UIGraphicsEndImageContext()
-            return normalizedImage
-        } else {
-            return self
         }
     }
 }

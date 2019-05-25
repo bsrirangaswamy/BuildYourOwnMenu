@@ -20,20 +20,13 @@ class MainMenuTableViewCell: UITableViewCell {
     }
     
     func setupCell(name: String?, price: String?, imageData: Data?) {
+        itemImageView.addImage(data: imageData)
         itemLabel.text = name
         if let priceText = price {
             itemPriceLabel.text = priceText
             itemPriceLabel.isHidden = false
         } else {
             itemPriceLabel.isHidden = true
-        }
-        if let imgData = imageData {
-            DispatchQueue.global(qos: .background).async {
-                let image = UIImage(data: imgData)
-                DispatchQueue.main.async {[unowned self] in
-                    self.itemImageView.image = image
-                }
-            }
         }
     }
 
@@ -43,4 +36,18 @@ class MainMenuTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+extension UIImageView {
+    func addImage(data: Data?) {
+        if let imageData = data {
+            DispatchQueue.global(qos: .background).async {
+                let imageFetched = UIImage(data: imageData)
+                DispatchQueue.main.async {[weak self] in
+                    guard let strongSelf = self else { return }
+                    strongSelf.image = imageFetched
+                }
+            }
+        }
+    }
 }

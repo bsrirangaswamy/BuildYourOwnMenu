@@ -16,6 +16,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Main Menu"
+        let userDefaults = UserDefaults.standard
+        let isDataPreloaded = userDefaults.bool(forKey: "isDataPreloaded")
+        if !isDataPreloaded {
+            PersistenceManager.sharedInstance.preLoadData()
+            userDefaults.set(true, forKey: "isDataPreloaded")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

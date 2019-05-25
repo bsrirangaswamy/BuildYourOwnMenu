@@ -113,4 +113,43 @@ class PersistenceManager: NSObject {
             print("Delete Save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
+    
+    func preLoadData() {
+        let menuGroup1 = createMenuGroup(name: "Waffles", imageName: "waffles")
+        menuGroup1.addToSubMenuItem(createSubItem(name: "Chocolate Waffle", imageName: "chocolateWaffle", price: "7.99$"))
+        menuGroup1.addToSubMenuItem(createSubItem(name: "Banana Waffle", imageName: "bananaWaffle", price: "8.99$"))
+        menuGroup1.addToSubMenuItem(createSubItem(name: "vegan Waffle", imageName: "veganWaffle", price: "9.99$"))
+        
+        let menuGroup2 = createMenuGroup(name: "Pancakes", imageName: "pancakes")
+        menuGroup2.addToSubMenuItem(createSubItem(name: "Sprinkes Pancakes", imageName: "sprinklesPancake", price: "6.99$"))
+        menuGroup2.addToSubMenuItem(createSubItem(name: "Banana Pancakes", imageName: "bananaPancake", price: "7.99$"))
+        menuGroup2.addToSubMenuItem(createSubItem(name: "Japanese Pancakes", imageName: "japanesePancake", price: "8.99$"))
+        
+        let menuGroup3 = createMenuGroup(name: "Bagels", imageName: "bagels")
+        menuGroup3.addToSubMenuItem(createSubItem(name: "Garlic Bagel", imageName: "garlicBagel", price: "5.99$"))
+        menuGroup3.addToSubMenuItem(createSubItem(name: "Blueberry Bagel", imageName: "blueberryBagel", price: "6.99$"))
+        menuGroup3.addToSubMenuItem(createSubItem(name: "Everything Bagel", imageName: "everythingBagel", price: "7.99$"))
+        do {
+            try managedContext!.save()
+            print("Bala save successful")
+        } catch let error as NSError {
+            print("Save failed: error = \(error) and description = \(error.userInfo)")
+        }
+    }
+    
+    private func createMenuGroup(name: String?, imageName: String) -> MenuGroup {
+        let menuGroupCreated = MenuGroup(context: managedContext!)
+        menuGroupCreated.name = name
+        menuGroupCreated.imageData = UIImage(named: imageName)?.jpegData(compressionQuality: 1)
+        menuGroupCreated.lastUpdated = Date()
+        return menuGroupCreated
+    }
+    
+    private func createSubItem(name: String?, imageName: String, price: String?) -> SubMenuItem {
+        let subMenuItemCreated = SubMenuItem(context: managedContext!)
+        subMenuItemCreated.itemName = name
+        subMenuItemCreated.itemPrice = price
+        subMenuItemCreated.itemImageData = UIImage(named: imageName)?.jpegData(compressionQuality: 1)
+        return subMenuItemCreated
+    }
 }

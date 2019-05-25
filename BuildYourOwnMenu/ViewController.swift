@@ -71,8 +71,34 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension ViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        mainGroupTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let newIndPath = newIndexPath {
+                mainGroupTableView.insertRows(at: [newIndPath], with: .automatic)
+            }
+            break
+        case .delete:
+            if let indPath = indexPath {
+                mainGroupTableView.deleteRows(at: [indPath], with: .automatic)
+            }
+            break
+        case .update:
+            if let indPath = indexPath {
+                mainGroupTableView.reloadRows(at: [indPath], with: .automatic)
+            }
+            break
+        default:
+            print("Bala action not supported")
+        }
+    }
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        mainGroupTableView.reloadData()
+        mainGroupTableView.endUpdates()
     }
 }
 

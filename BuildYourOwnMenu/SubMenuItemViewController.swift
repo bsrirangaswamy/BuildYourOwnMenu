@@ -30,7 +30,6 @@ class SubMenuItemViewController: UIViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        print("Bala add button tapped")
         let createItemController = CreateItemViewController()
         createItemController.mainGroupIndexPath = mainGroupIndexPath
         actionPerformed = .insert
@@ -56,12 +55,12 @@ extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "kDelete".localized) { (action, indexpath) in
             self.actionPerformed = .delete
             self.changedIndexPath = indexPath
             PersistenceManager.sharedInstance.deleteSubMenuDataInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)
         }
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
+        let editAction = UITableViewRowAction(style: .normal, title: "kEdit".localized) { (action, indexpath) in
             self.actionPerformed = .edit
             self.changedIndexPath = indexPath
             self.editSubMenuInMainMenu(atIndexPath: self.mainGroupIndexPath, subMenuIndex: indexPath.row)

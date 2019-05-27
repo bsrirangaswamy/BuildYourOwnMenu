@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  BuildYourOwnMenu
+
+  Created by Balakumaran Srirangaswamy on 5/26/19.
+  Copyright © 2019 Bala. All rights reserved.
+*/
+
+"kMainMenu" = "Main Menu";
+"kDelete" = "Delete";
+"kEdit" = "Edit";
+"kTakePicture" = "Take Picture";
+"kPhotoLibrary" = "Photo Library";
+"kCancel" = "Cancel";

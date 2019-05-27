@@ -32,7 +32,7 @@ class PersistenceManager: NSObject {
         let fetchRequestContrller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try fetchRequestContrller.performFetch()
-            print("Bala fetch successful")
+            print("Fetch successful")
         } catch let error as NSError {
             print("Fetch failed: error = \(error) and description = \(error.userInfo)")
         }
@@ -50,9 +50,9 @@ class PersistenceManager: NSObject {
         menuGroupAdd.setValue(Date(), forKey: "lastUpdated")
         do {
             try managedContext.save()
-            print("Bala save successful")
+            print("Add save successful")
         } catch let error as NSError {
-            print("Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Add save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -64,9 +64,9 @@ class PersistenceManager: NSObject {
         menuGroupUpdate.lastUpdated = Date()
         do {
             try managedContext.save()
-            print("Bala update saved successful")
+            print("Update saved successful")
         } catch let error as NSError {
-            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Update save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -76,9 +76,9 @@ class PersistenceManager: NSObject {
         managedContext.delete(menuGroupDelete)
         do {
             try managedContext.save()
-            print("Bala update saved successful")
+            print("Delete saved successful")
         } catch let error as NSError {
-            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Delete save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -95,9 +95,9 @@ class PersistenceManager: NSObject {
         menuGroupUpdate.addToSubMenuItem(subMenuAdd)
         do {
             try managedContext.save()
-            print("Bala save successful")
+            print("Add sub menu save successful")
         } catch let error as NSError {
-            print("Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Add  sub menu save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -113,9 +113,9 @@ class PersistenceManager: NSObject {
         menuGroupUpdate.lastUpdated = Date()
         do {
             try managedContext.save()
-            print("Bala Update save successful")
+            print("Update  sub menu save successful")
         } catch let error as NSError {
-            print("Update Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Update  sub menu save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -125,9 +125,9 @@ class PersistenceManager: NSObject {
         menuGroupUpdate.removeFromSubMenuItem(at: subMenuIndex)
         do {
             try managedContext.save()
-            print("Bala delet save successful")
+            print("Delete sub menu save successful")
         } catch let error as NSError {
-            print("Delete Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Delete sub menu save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -149,9 +149,9 @@ class PersistenceManager: NSObject {
         menuGroup3.addToSubMenuItem(createSubItem(name: "Everything Bagel", imageName: "everythingBagel", price: "7.99$"))
         do {
             try managedContext.save()
-            print("Bala save successful")
+            print("Preload save successful")
         } catch let error as NSError {
-            print("Save failed: error = \(error) and description = \(error.userInfo)")
+            print("Preload save failed: error = \(error) and description = \(error.userInfo)")
         }
     }
     
@@ -180,6 +180,7 @@ class PersistenceManager: NSObject {
         if context.hasChanges {
             do {
                 try context.save()
+                print("Save failed")
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")

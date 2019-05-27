@@ -55,13 +55,13 @@ class CreateItemViewController: UIViewController {
         imagePickerController.allowsEditing = false
 
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        if let cameraAction = self.createAction(title: "Take Picture", sourceType: .camera) {
+        if let cameraAction = self.createAction(title: "kTakePicture".localized, sourceType: .camera) {
             alertController.addAction(cameraAction)
         }
-        if let photoLibAction = self.createAction(title: "Photo Library", sourceType: .photoLibrary) {
+        if let photoLibAction = self.createAction(title: "kPhotoLibrary".localized, sourceType: .photoLibrary) {
             alertController.addAction(photoLibAction)
         }
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "kCancel".localized, style: .cancel, handler: nil))
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             alertController.popoverPresentationController?.sourceView = sender

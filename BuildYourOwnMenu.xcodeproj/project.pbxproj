@@ -32,6 +32,9 @@
 		2DFE509D229B5ABD0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD3D2295F75E00242FCA /* BuildYourOwnMenu.xcdatamodeld */; };
 		2DFE50A2229B5D8F0097BB6D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7822961B3400242FCA /* PersistenceManager.swift */; };
 		2DFE50A3229B5D8F0097BB6D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7822961B3400242FCA /* PersistenceManager.swift */; };
+		2DFE50A5229B71A80097BB6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DFE50A4229B71A70097BB6D /* Localizable.strings */; };
+		2DFE50A6229B71A80097BB6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DFE50A4229B71A70097BB6D /* Localizable.strings */; };
+		2DFE50A7229B71A80097BB6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DFE50A4229B71A70097BB6D /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,7 @@
 		2DF4BD5B2295F76000242FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF4BD7822961B3400242FCA /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuTableViewCell.swift; sourceTree = "<group>"; };
+		2DFE50A4229B71A70097BB6D /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +150,7 @@
 				2DF4BD7D22961B7600242FCA /* Manager */,
 				2DF4BD3A2295F75E00242FCA /* Main.storyboard */,
 				2DF4BD402295F76000242FCA /* Assets.xcassets */,
+				2DFE50A4229B71A70097BB6D /* Localizable.strings */,
 				2DF4BD422295F76000242FCA /* LaunchScreen.storyboard */,
 				2DF4BD452295F76000242FCA /* Info.plist */,
 				2DF4BD3D2295F75E00242FCA /* BuildYourOwnMenu.xcdatamodeld */,
@@ -283,6 +288,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DFE50A5229B71A80097BB6D /* Localizable.strings in Resources */,
 				2DF4BD442295F76000242FCA /* LaunchScreen.storyboard in Resources */,
 				2DF4BD412295F76000242FCA /* Assets.xcassets in Resources */,
 				2DF4BD3C2295F75E00242FCA /* Main.storyboard in Resources */,
@@ -295,6 +301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DC8F58C2296C50A004C3012 /* CreateItemViewController.xib in Resources */,
+				2DFE50A6229B71A80097BB6D /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DC8F58D2296C50A004C3012 /* CreateItemViewController.xib in Resources */,
+				2DFE50A7229B71A80097BB6D /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

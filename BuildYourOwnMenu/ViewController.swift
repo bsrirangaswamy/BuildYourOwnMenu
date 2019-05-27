@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Main Menu"
+        self.title = "kMainMenu".localized
         let userDefaults = UserDefaults.standard
         let isDataPreloaded = userDefaults.bool(forKey: "isDataPreloaded")
         if !isDataPreloaded {
@@ -51,10 +51,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexpath) in
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "kDelete".localized) { (action, indexpath) in
             PersistenceManager.sharedInstance.deleteMainMenuData(indexPath: indexPath)
         }
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexpath) in
+        let editAction = UITableViewRowAction(style: .normal, title: "kEdit".localized) { (action, indexpath) in
             self.editMainMenu(atIndexPath: indexPath)
         }
         return [deleteAction, editAction]
@@ -99,7 +99,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
             }
             break
         default:
-            print("Bala action not supported")
+            print("Action not supported")
         }
     }
     
@@ -114,6 +114,12 @@ extension ViewController {
         if segue.identifier == "showSubItemsVC", let navController = segue.destination as? UINavigationController, let subMenuItemVC = navController.topViewController as? SubMenuItemViewController {
             subMenuItemVC.mainGroupIndexPath = mainGroupTableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
         }
+    }
+}
+
+extension String {
+    public var localized: String {
+        return NSLocalizedString(self, comment: "")
     }
 }
 

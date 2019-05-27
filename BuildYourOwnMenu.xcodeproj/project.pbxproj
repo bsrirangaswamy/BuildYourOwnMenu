@@ -14,8 +14,6 @@
 		2DC8F58C2296C50A004C3012 /* CreateItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC8F5872296C50A004C3012 /* CreateItemViewController.xib */; };
 		2DC8F58D2296C50A004C3012 /* CreateItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC8F5872296C50A004C3012 /* CreateItemViewController.xib */; };
 		2DC8F58F22974993004C3012 /* SubMenuItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */; };
-		2DC8F59022974993004C3012 /* SubMenuItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */; };
-		2DC8F59122974993004C3012 /* SubMenuItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */; };
 		2DF4BD372295F75E00242FCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD362295F75E00242FCA /* AppDelegate.swift */; };
 		2DF4BD392295F75E00242FCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD382295F75E00242FCA /* ViewController.swift */; };
 		2DF4BD3C2295F75E00242FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DF4BD3A2295F75E00242FCA /* Main.storyboard */; };
@@ -28,6 +26,12 @@
 		2DF4BD7F2296322B00242FCA /* MainMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */; };
 		2DF4BD802296322B00242FCA /* MainMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */; };
 		2DF4BD812296322B00242FCA /* MainMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7E2296322B00242FCA /* MainMenuTableViewCell.swift */; };
+		2DFE5096229B50990097BB6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD362295F75E00242FCA /* AppDelegate.swift */; };
+		2DFE5097229B509A0097BB6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD362295F75E00242FCA /* AppDelegate.swift */; };
+		2DFE509C229B5ABC0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD3D2295F75E00242FCA /* BuildYourOwnMenu.xcdatamodeld */; };
+		2DFE509D229B5ABD0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD3D2295F75E00242FCA /* BuildYourOwnMenu.xcdatamodeld */; };
+		2DFE50A2229B5D8F0097BB6D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7822961B3400242FCA /* PersistenceManager.swift */; };
+		2DFE50A3229B5D8F0097BB6D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD7822961B3400242FCA /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -325,8 +329,10 @@
 			files = (
 				2DF4BD4F2295F76000242FCA /* BuildYourOwnMenuTests.swift in Sources */,
 				2DC8F5892296C50A004C3012 /* CreateItemViewController.swift in Sources */,
+				2DFE5096229B50990097BB6D /* AppDelegate.swift in Sources */,
+				2DFE50A2229B5D8F0097BB6D /* PersistenceManager.swift in Sources */,
+				2DFE509C229B5ABC0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */,
 				2DF4BD802296322B00242FCA /* MainMenuTableViewCell.swift in Sources */,
-				2DC8F59022974993004C3012 /* SubMenuItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,8 +342,10 @@
 			files = (
 				2DF4BD5A2295F76000242FCA /* BuildYourOwnMenuUITests.swift in Sources */,
 				2DC8F58A2296C50A004C3012 /* CreateItemViewController.swift in Sources */,
+				2DFE5097229B509A0097BB6D /* AppDelegate.swift in Sources */,
+				2DFE50A3229B5D8F0097BB6D /* PersistenceManager.swift in Sources */,
+				2DFE509D229B5ABD0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */,
 				2DF4BD812296322B00242FCA /* MainMenuTableViewCell.swift in Sources */,
-				2DC8F59122974993004C3012 /* SubMenuItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,25 +10,32 @@ import XCTest
 @testable import BuildYourOwnMenu
 
 class BuildYourOwnMenuTests: XCTestCase {
+    
+    var pMTest: PersistenceManager!
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        pMTest = PersistenceManager.sharedInstance
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func test_data_PreLoad() {
+        let coreDataObjectCount = pMTest.fetchedResultsController.sections?[0].numberOfObjects ?? 0
+        XCTAssertEqual(coreDataObjectCount, 3, "PreLoad to core data failed")
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func test_update_Data() {
+        let coreDataObjectCount = pMTest.fetchedResultsController.sections?[0].numberOfObjects ?? 0
+        let indPath = IndexPath(row: coreDataObjectCount-1, section: 0)
+        let menuUpdateObject = pMTest.fetchedResultsController.object(at: indPath)
+        let nameBefore = menuUpdateObject.name!
+        pMTest.updateMainMenuData(indexPath: indPath, name: nameBefore+nameBefore, imageData: nil)
+        let menuUpdateObjectAfter = pMTest.fetchedResultsController.object(at: indPath)
+        let nameAfter = menuUpdateObjectAfter.name!
+        XCTAssertEqual(nameAfter, nameBefore+nameBefore, "Update to core data failed")
     }
 
 }

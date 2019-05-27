@@ -50,6 +50,7 @@ extension SubMenuItemViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainMenuCell", for: indexPath) as? MainMenuTableViewCell,  let subItem = PersistenceManager.sharedInstance.fetchedResultsController.object(at: mainGroupIndexPath).subMenuItem?[indexPath.row] as? SubMenuItem else { return MainMenuTableViewCell() }
+        cell.selectionStyle = .none
         cell.setupCell(name: subItem.itemName, price: subItem.itemPrice, imageData: subItem.itemImageData)
         return cell
     }

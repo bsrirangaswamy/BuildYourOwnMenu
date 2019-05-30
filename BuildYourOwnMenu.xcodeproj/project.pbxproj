@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D6DA75D22A04ED30003CC2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD382295F75E00242FCA /* ViewController.swift */; };
+		2D6DA75E22A04ED40003CC2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF4BD382295F75E00242FCA /* ViewController.swift */; };
+		2D6DA75F22A04ED60003CC2E /* SubMenuItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */; };
+		2D6DA76022A04ED70003CC2E /* SubMenuItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F58E22974993004C3012 /* SubMenuItemViewController.swift */; };
 		2DC8F5882296C50A004C3012 /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F5862296C50A004C3012 /* CreateItemViewController.swift */; };
 		2DC8F5892296C50A004C3012 /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F5862296C50A004C3012 /* CreateItemViewController.swift */; };
 		2DC8F58A2296C50A004C3012 /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8F5862296C50A004C3012 /* CreateItemViewController.swift */; };
@@ -339,8 +343,10 @@
 				2DC8F5892296C50A004C3012 /* CreateItemViewController.swift in Sources */,
 				2DFE5096229B50990097BB6D /* AppDelegate.swift in Sources */,
 				2DFE50A2229B5D8F0097BB6D /* PersistenceManager.swift in Sources */,
+				2D6DA75D22A04ED30003CC2E /* ViewController.swift in Sources */,
 				2DFE509C229B5ABC0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */,
 				2DF4BD802296322B00242FCA /* MainMenuTableViewCell.swift in Sources */,
+				2D6DA75F22A04ED60003CC2E /* SubMenuItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,8 +358,10 @@
 				2DC8F58A2296C50A004C3012 /* CreateItemViewController.swift in Sources */,
 				2DFE5097229B509A0097BB6D /* AppDelegate.swift in Sources */,
 				2DFE50A3229B5D8F0097BB6D /* PersistenceManager.swift in Sources */,
+				2D6DA75E22A04ED40003CC2E /* ViewController.swift in Sources */,
 				2DFE509D229B5ABD0097BB6D /* BuildYourOwnMenu.xcdatamodeld in Sources */,
 				2DF4BD812296322B00242FCA /* MainMenuTableViewCell.swift in Sources */,
+				2D6DA76022A04ED70003CC2E /* SubMenuItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
